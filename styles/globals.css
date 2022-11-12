@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html {
+  @apply bg-background text-foreground;
+
+  /* Changing default font size, let everything else scale accordinly */
+  font-size: 22px;
+}
