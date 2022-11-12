@@ -29,3 +29,5 @@ Install `eslint-config-prettier`.
 ```sh
 yarn add --dev eslint-config-prettier
 ```
+
+Install Tailwind.
