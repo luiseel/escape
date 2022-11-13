@@ -25,6 +25,8 @@ const Propmt: React.FC<Props> = ({ onCommand }) => {
         type="text"
         onChange={onChange}
         value={command}
+        placeholder="Type your commands here"
+        autoFocus
       />
     </form>
   );
