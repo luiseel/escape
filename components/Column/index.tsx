@@ -5,7 +5,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-const Column: React.FC<Props> = ({ mode = "2xl", children }) => {
+const Column: React.FC<Props> = ({ mode = "xl", children }) => {
   const baseClasses = "px-4 h-full lg:mx-auto lg:px-16";
   const [classes, setClasses] = useState<string>();
 
