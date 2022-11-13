@@ -8,3 +8,23 @@ html {
   /* Changing default font size, let everything else scale accordinly */
   font-size: 22px;
 }
+
+/* width */
+::-webkit-scrollbar {
+  width: 2px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  @apply bg-background;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  @apply bg-foreground;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-foreground;
+}

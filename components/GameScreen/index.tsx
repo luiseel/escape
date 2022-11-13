@@ -13,7 +13,7 @@ const GameScreen: React.FC<Props> = () => {
 
   return (
     <div className="flex flex-col justify-between border-2 py-2">
-      <div className="px-2 pb-2 h-[400px]">
+      <div className="px-2 pb-2">
         <TextHistory data={data} />
       </div>
       <div className="border-t-2 px-2 pt-2">
