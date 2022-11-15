@@ -19,14 +19,12 @@ const Propmt: React.FC<Props> = ({ onCommand }) => {
 
   return (
     <form className="flex flex-row gap-2" onSubmit={onSubmit}>
-      <span>$</span>
+      <span>&gt;</span>
       <input
         className="bg-background w-full focus:outline-0"
         type="text"
         onChange={onChange}
         value={command}
-        placeholder="Type your commands here"
-        autoFocus
       />
     </form>
   );

@@ -1,8 +1,21 @@
 import React, { useEffect } from "react";
 
-type Props = {
-  data: string[];
+export type Element = {
+  type: "in" | "out";
+  text: string;
 };
+
+type Props = {
+  data: Element[];
+};
+
+export function input(text: string) {
+  return { type: "in", text } as Element;
+}
+
+export function output(text: string) {
+  return { type: "out", text } as Element;
+}
 
 const TextHistory: React.FC<Props> = ({ data }) => {
   useEffect(() => {
@@ -13,8 +26,13 @@ const TextHistory: React.FC<Props> = ({ data }) => {
 
   return (
     <div id="history" className="h-[400px] overflow-y-scroll scroll-smooth">
-      {data.map((it, idx) => (
-        <div key={idx}>{it}</div>
+      {data.map(({ text, type }, idx) => (
+        <div key={idx}>
+          <pre>
+            {type === "in" ? ">" : "<"}
+            {" " + text}
+          </pre>
+        </div>
       ))}
     </div>
   );

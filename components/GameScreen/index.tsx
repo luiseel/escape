@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Prompt from "components/Prompt";
-import TextHistory from "components/TextHistory";
+import TextHistory, { Element, input, output } from "components/TextHistory";
 import { CommandManager } from "game/prompt";
 
 type Props = {};
@@ -8,15 +8,18 @@ type Props = {};
 const manager = new CommandManager("I don't understand you!");
 
 const GameScreen: React.FC<Props> = () => {
-  const [data, setData] = useState<string[]>([]);
+  const [data, setData] = useState<Element[]>([]);
 
   useEffect(() => {
-    manager.addCmd("list items", () => "This are your items: ...");
+    manager.addCmd(
+      "list items",
+      () => `This is a list of your items:\n  * MEDICINE X 2`
+    );
   }, []);
 
   function onCommand(value: string) {
     const response = manager.executeCmd(value);
-    setData([...data, value, response]);
+    setData([...data, input(value), output(response)] as Element[]);
   }
 
   return (

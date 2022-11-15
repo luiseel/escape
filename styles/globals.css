@@ -9,6 +9,10 @@ html {
   font-size: 22px;
 }
 
+pre {
+  @apply font-sans;
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 2px;
