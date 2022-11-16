@@ -5,7 +5,7 @@ type Props = {
 };
 
 const Panel: React.FC<Props> = ({ children }) => {
-  return <div className="border-2 p-2">{children}</div>;
+  return <div className="border-base p-2">{children}</div>;
 };
 
 export default Panel;

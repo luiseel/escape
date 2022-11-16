@@ -10,7 +10,7 @@ type Props = {
 export const DefaultLayout: React.FC<Props> = ({ children }) => {
   return (
     <div className="flex flex-col h-screen justify-between">
-      <header className="fixed top-0 w-full bg-background h-[60px] border-b-2">
+      <header className="fixed top-0 w-full bg-background h-[60px] border-b-base">
         <Column>
           <Block>
             <Link href="/">Escape!</Link>
@@ -20,7 +20,7 @@ export const DefaultLayout: React.FC<Props> = ({ children }) => {
 
       {children}
 
-      <footer className="border-t-2 h-[60px]">
+      <footer className="border-t-base h-[60px]">
         <Column>
           <Block>
             <span>

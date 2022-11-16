@@ -15,7 +15,9 @@ pre {
 
 /* width */
 ::-webkit-scrollbar {
-  width: 2px;
+  width: 4px;
+  height: 4px;
+  @apply bg-foreground;
 }
 
 /* Track */

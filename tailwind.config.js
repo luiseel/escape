@@ -7,13 +7,16 @@ module.exports = {
   ],
   theme: {
     colors: {
-      background: "#3C412C",
-      foreground: "#A8C64E",
+      background: "#348597",
+      foreground: "#F4A896",
       transparent: "transparent",
     },
     extend: {
       fontFamily: {
         sans: ["var(--default-font)", "monospace"],
+      },
+      borderWidth: {
+        base: "4px",
       },
     },
   },
