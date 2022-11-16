@@ -1,18 +1,19 @@
 export enum GameErrorCode {
-  ITEM_NOT_BAG = 0x01,
+  COMMAND_NOT_FOUND = "COMMAND_NOT_FOUND",
+  ITEM_NOT_BAG = "ITEM_NOT_BAG",
 }
 
-export type GameErrorCodeMessages = Map<GameErrorCode, string>;
+export type GameErrorCodeMessages = { [key: string]: string };
 
 export class GameErrorMessageResolver {
-  private errorMsgs = new Map<GameErrorCode, string>();
+  private errorMsgs;
 
   constructor(errorMsgs: GameErrorCodeMessages) {
     this.errorMsgs = errorMsgs;
   }
 
   getMsg(code: GameErrorCode) {
-    const result = this.errorMsgs.get(code);
+    const result = this.errorMsgs[code];
     if (!result) throw new Error("code not found");
     return result;
   }
