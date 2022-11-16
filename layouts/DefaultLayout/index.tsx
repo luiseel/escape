@@ -18,13 +18,13 @@ export const DefaultLayout: React.FC<Props> = ({ children }) => {
         </Column>
       </header>
 
-      <main className="mt-[60px]">{children}</main>
+      {children}
 
       <footer className="border-t-2 h-[60px]">
         <Column>
           <Block>
             <span>
-              With love by
+              Built by
               <a
                 href="http://twitter.com/luiseel_"
                 target="_blank"

@@ -13,7 +13,7 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-        sans: ["VT323", "monospace"],
+        sans: ["var(--default-font)", "monospace"],
       },
     },
   },
