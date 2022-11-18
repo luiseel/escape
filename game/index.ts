@@ -79,6 +79,7 @@ export class Game {
   private addBaseCmds() {
     // Base commands
     this.commandManager.addCmd("help", this.help.bind(this));
+    this.commandManager.addCmd("welcome", this.welcome.bind(this));
   }
 
   private listItems() {
@@ -101,6 +102,12 @@ export class Game {
       * (help):         Show this help.
       * (levels):       List the levels you can play.
       * (play [level]): Starts a new level.
+    `.trim();
+  }
+
+  private welcome() {
+    return `
+      Welcome to Escape!
     `.trim();
   }
 }
