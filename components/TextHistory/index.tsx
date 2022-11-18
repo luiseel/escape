@@ -1,20 +1,20 @@
 import React, { useEffect } from "react";
 
-export type Element = {
+export type Text = {
   type: "in" | "out";
   text: string;
 };
 
 type Props = {
-  data: Element[];
+  data: Text[];
 };
 
 export function input(text: string) {
-  return { type: "in", text } as Element;
+  return { type: "in", text } as Text;
 }
 
 export function output(text: string) {
-  return { type: "out", text } as Element;
+  return { type: "out", text } as Text;
 }
 
 const TextHistory: React.FC<Props> = ({ data }) => {
@@ -25,7 +25,7 @@ const TextHistory: React.FC<Props> = ({ data }) => {
   }, [data]);
 
   return (
-    <div id="history" className="h-[400px] overflow-y-scroll scroll-smooth">
+    <div id="history" className="h-[400px] overflow-y-scroll">
       {data.map(({ text, type }, idx) => (
         <div key={idx} className="flex flow-row gap-2">
           <span>{type === "in" ? "> " : "< "}</span>

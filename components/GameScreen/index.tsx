@@ -1,28 +1,36 @@
 import React, { useState, useEffect } from "react";
 import Prompt from "components/Prompt";
-import TextHistory, { Element, input, output } from "components/TextHistory";
+import TextHistory, { Text, input, output } from "components/TextHistory";
 import { Game } from "game";
 
 type Props = {};
 
+type Prompt = {
+  value: string;
+  showInput: boolean;
+};
+
 const GameScreen: React.FC<Props> = () => {
-  const [data, setData] = useState<Element[]>([]);
   const [game] = useState(new Game("Luis"));
+  const [data, setData] = useState<Text[]>([]);
+  const [prompt, setPrompt] = useState<Prompt>({
+    value: "welcome",
+    showInput: false,
+  });
 
   useEffect(() => {
-    onCommand("welcome", false);
-  }, []);
-
-  function onCommand(value: string, showInput = true) {
-    if (!value) return;
+    const { value, showInput } = prompt;
     const response = game.runPrompt(value);
-    let text;
     if (showInput) {
-      text = [...data, input(value), output(response)];
+      setData((data) => [...data, input(value), output(response)]);
     } else {
-      text = [...data, output(response)];
+      setData((data) => [...data, output(response)]);
     }
-    setData(text as Element[]);
+  }, [prompt, game]);
+
+  function onCommand(value: string) {
+    if (!value) return;
+    setPrompt({ value, showInput: true });
   }
 
   return (

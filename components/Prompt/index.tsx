@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 type Props = {
-  onCommand: (value: string) => void;
+  onCommand: (_: string) => void;
 };
 
 const Propmt: React.FC<Props> = ({ onCommand }) => {
