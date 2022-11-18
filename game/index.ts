@@ -4,7 +4,7 @@ import errors from "./assets/errors.json";
 
 export type ItemType = "consumable" | "tool";
 
-export abstract class Item {
+abstract class Item {
   name: string;
   type: ItemType;
 
@@ -21,7 +21,7 @@ interface InventoryItem {
   qty: number;
 }
 
-export class Inventory {
+class Inventory {
   items = new Map<string, InventoryItem>();
 
   addItem(item: Item, qty: number) {
@@ -37,7 +37,7 @@ export class Inventory {
 
 type PlayerStatus = "healthly" | "poisoned";
 
-export class Player {
+class Player {
   name: string;
   health = 3;
   status = "healthly" as PlayerStatus;
