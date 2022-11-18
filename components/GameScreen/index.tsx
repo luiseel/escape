@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Prompt from "components/Prompt";
 import TextHistory, { Element, input, output } from "components/TextHistory";
 import { Game } from "game";
