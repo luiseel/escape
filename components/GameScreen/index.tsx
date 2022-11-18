@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
 import Prompt from "components/Prompt";
 import TextHistory, { Element, input, output } from "components/TextHistory";
-import { CommandManager } from "game/prompt";
 import { Game } from "game";
 
 type Props = {};
 
 const GameScreen: React.FC<Props> = () => {
-  const game = new Game();
+  const game = new Game("Luis");
   const [data, setData] = useState<Element[]>([]);
 
   function onCommand(value: string) {
-    const response = game.commandManager.executeCmd(value);
+    if (!value) return;
+    const response = game.runPrompt(value);
     setData([...data, input(value), output(response)] as Element[]);
   }
 

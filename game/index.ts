@@ -30,7 +30,7 @@ export class Inventory {
 
   getItem(name: string) {
     const result = this.items.get(name);
-    if (!result) throw GameError.fromCode(GameErrorCode.ITEM_NOT_BAG);
+    if (!result) throw GameError.fromCode(GameErrorCode.NO_ITEM_IN_INVENTORY);
     return result;
   }
 }
@@ -41,26 +41,39 @@ export class Player {
   name: string;
   health = 3;
   status = "healthly" as PlayerStatus;
-  inventory = new Inventory();
+  inventory;
 
   constructor(name: string) {
     this.name = name;
+    this.inventory = new Inventory();
   }
 }
 
 export class Game {
-  errorResolver;
-  commandManager;
-  player;
+  private errorResolver;
+  private commandManager;
+  private player;
 
-  constructor() {
+  constructor(playerName: string) {
     this.errorResolver = new GameErrorMessageResolver(errors);
     const commandNotFoundMessage = this.errorResolver.getMsg(
       GameErrorCode.COMMAND_NOT_FOUND
     );
     this.commandManager = new CommandManager(commandNotFoundMessage);
-    this.player = new Player("Luis");
+    this.player = new Player(playerName);
     this.addInitialCmds();
+  }
+
+  runPrompt(prompt: string) {
+    try {
+      return this.commandManager.executeCmd(prompt);
+    } catch (e) {
+      if (e instanceof GameError) {
+        return this.errorResolver.getMsg(e.code);
+      } else {
+        return this.errorResolver.getMsg(GameErrorCode.UNEXPECTED_ERROR);
+      }
+    }
   }
 
   private addInitialCmds() {
@@ -68,7 +81,8 @@ export class Game {
   }
 
   private listItems() {
-    if (this.player.inventory.items.size === 0) return "You have not items";
+    if (this.player.inventory.items.size === 0)
+      throw GameError.fromCode(GameErrorCode.NO_ITEMS);
     let result = "";
     for (let {
       value: { name },

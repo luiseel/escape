@@ -1,4 +1,6 @@
 {
+  "UNEXPECTED_ERROR": "An unexpected error has happened",
   "COMMAND_NOT_FOUND": "The command has not been found",
-  "ITEM_NOT_BAG": "You don't have such item in your bag"
+  "NO_ITEM_IN_INVENTORY": "You don't have such item in your inventory",
+  "NO_ITEMS": "You have no items!"
 }

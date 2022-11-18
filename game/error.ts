@@ -1,6 +1,8 @@
 export enum GameErrorCode {
+  UNEXPECTED_ERROR = "UNEXPECTED_ERROR",
   COMMAND_NOT_FOUND = "COMMAND_NOT_FOUND",
-  ITEM_NOT_BAG = "ITEM_NOT_BAG",
+  NO_ITEM_IN_INVENTORY = "NO_ITEM_IN_INVENTORY",
+  NO_ITEMS = "NO_ITEMS",
 }
 
 export type GameErrorCodeMessages = { [key: string]: string };
