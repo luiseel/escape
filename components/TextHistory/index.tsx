@@ -27,11 +27,9 @@ const TextHistory: React.FC<Props> = ({ data }) => {
   return (
     <div id="history" className="h-[400px] overflow-y-scroll scroll-smooth">
       {data.map(({ text, type }, idx) => (
-        <div key={idx}>
-          <pre>
-            {type === "in" ? ">" : "<"}
-            {" " + text}
-          </pre>
+        <div key={idx} className="flex flow-row gap-2">
+          <span>{type === "in" ? "> " : "< "}</span>
+          <span className="whitespace-pre-line">{text}</span>
         </div>
       ))}
     </div>
