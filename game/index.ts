@@ -61,7 +61,7 @@ export class Game {
     );
     this.commandManager = new CommandManager(commandNotFoundMessage);
     this.player = new Player(playerName);
-    this.addInitialCmds();
+    this.addBaseCmds();
   }
 
   runPrompt(prompt: string) {
@@ -76,8 +76,9 @@ export class Game {
     }
   }
 
-  private addInitialCmds() {
-    this.commandManager.addCmd("list items", this.listItems.bind(this));
+  private addBaseCmds() {
+    // Base commands
+    this.commandManager.addCmd("help", this.help.bind(this));
   }
 
   private listItems() {
@@ -91,5 +92,15 @@ export class Game {
       result += `* ${name} X ${qty}\n`;
     }
     return result;
+  }
+
+  private help() {
+    return `
+      These are the commands that you can call:
+      * (welcome):      Show the title screen of the game.
+      * (help):         Show this help.
+      * (levels):       List the levels you can play.
+      * (play [level]): Starts a new level.
+    `.trim();
   }
 }
