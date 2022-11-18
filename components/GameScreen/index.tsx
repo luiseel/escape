@@ -7,7 +7,7 @@ type Props = {};
 
 const GameScreen: React.FC<Props> = () => {
   const [data, setData] = useState<Element[]>([]);
-  const [game, setGame] = useState<Game>(new Game("Luis"));
+  const [game] = useState(new Game("Luis"));
 
   useEffect(() => {
     onCommand("welcome", false);
