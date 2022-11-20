@@ -4,8 +4,6 @@
 
 html {
   @apply bg-background text-foreground;
-
-  /* Changing default font size, let everything else scale accordinly */
 }
 
 

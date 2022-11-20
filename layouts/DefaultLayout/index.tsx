@@ -25,14 +25,13 @@ function Footer() {
       <Column>
         <Block>
           <span>
-            Built by
             <a
               href="http://twitter.com/luiseel_"
               target="_blank"
               rel="noopener noreferrer"
             >
               {" "}
-              luiseel
+              Ah Dog!
             </a>
           </span>
         </Block>
