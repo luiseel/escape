@@ -34,11 +34,11 @@ const GameScreen: React.FC<Props> = () => {
   }
 
   return (
-    <div className="flex flex-col justify-between border-base py-2">
-      <div className="px-2 pb-2">
+    <div className="flex flex-col justify-between border-base">
+      <div className="p-2">
         <TextHistory data={data} />
       </div>
-      <div className="border-t-base px-2 pt-2">
+      <div className="border-t-base p-2 bg-foreground text-background">
         <Prompt onCommand={onCommand} />
       </div>
     </div>

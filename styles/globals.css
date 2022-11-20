@@ -6,8 +6,8 @@ html {
   @apply bg-background text-foreground;
 
   /* Changing default font size, let everything else scale accordinly */
-  font-size: 24px;
 }
+
 
 pre {
   @apply font-sans;
@@ -15,7 +15,9 @@ pre {
 
 /* width */
 ::-webkit-scrollbar {
+  /* Controls the vertical sidebar */
   width: 4px;
+  /* Controls the horizontal sidebar */
   height: 4px;
   @apply bg-foreground;
 }
