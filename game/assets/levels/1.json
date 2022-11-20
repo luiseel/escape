@@ -1,0 +1,12 @@
+{
+  "id": 1,
+  "name": "The Rocket",
+  "data": {
+    "states": [
+      {
+        "state": "intro",
+        "text": ""
+      }
+    ]
+  }
+}

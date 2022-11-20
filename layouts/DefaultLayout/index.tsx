@@ -12,7 +12,7 @@ function Header() {
     <header className="fixed top-0 w-full bg-background h-[60px] border-b-base">
       <Column>
         <Block>
-          <Link href="/">Escape!</Link>
+          <Link href="/">Welts!</Link>
         </Block>
       </Column>
     </header>

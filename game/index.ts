@@ -82,7 +82,7 @@ export class Game {
     this.commandManager.addCmd("welcome", this.welcome.bind(this));
   }
 
-  private listItems() {
+  private inventory() {
     if (this.player.inventory.items.size === 0)
       throw GameError.fromCode(GameErrorCode.NO_ITEMS);
     let result = "";
@@ -106,8 +106,6 @@ export class Game {
   }
 
   private welcome() {
-    return `
-      Welcome to Escape!
-    `.trim();
+    return "Welcome to Welts!";
   }
 }

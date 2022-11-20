@@ -21,7 +21,7 @@ export class CommandManager {
   }
 
   executeCmd(prompt: string, errorMsg?: string) {
-    const cmd = this.commands.find((it) => prompt.match(it.prompt));
+    const cmd = this.commands.find((it) => prompt.match(`^${it.prompt}$`));
     if (!cmd) return errorMsg ?? this.errorMsg;
     const args = prompt.match(cmd.prompt);
     return cmd.action(args as string[]);
