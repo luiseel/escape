@@ -1,11 +1,22 @@
 {
   "id": 1,
-  "name": "The Rocket",
+  "name": "OMNI-H: What cures everything",
   "data": {
-    "states": [
+    "rooms": [
       {
-        "state": "intro",
-        "text": ""
+        "name": "studio",
+        "int": [
+          {
+            "name": "desk",
+            "type": "object",
+            "cmds": [
+              {
+                "prompt": "look",
+                "response": "The desk looks cool"
+              }
+            ]
+          }
+        ]
       }
     ]
   }

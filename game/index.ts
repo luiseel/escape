@@ -1,6 +1,7 @@
 import { GameErrorMessageResolver, GameErrorCode, GameError } from "./error";
 import { CommandManager } from "./prompt";
 import errors from "./assets/errors.json";
+import levels from "./assets/levels";
 
 export type ItemType = "consumable" | "tool";
 
@@ -80,6 +81,7 @@ export class Game {
     // Base commands
     this.commandManager.addCmd("help", this.help.bind(this));
     this.commandManager.addCmd("welcome", this.welcome.bind(this));
+    this.commandManager.addCmd("levels", this.levels.bind(this));
   }
 
   private inventory() {
@@ -107,5 +109,14 @@ export class Game {
 
   private welcome() {
     return "Welcome to Welts!";
+  }
+
+  private levels() {
+    let result = "\\n";
+    for (let level in levels) {
+      const { id, name } = levels[level];
+      result = `${id}) ${name}`;
+    }
+    return result;
   }
 }

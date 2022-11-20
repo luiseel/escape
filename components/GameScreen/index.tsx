@@ -38,7 +38,7 @@ const GameScreen: React.FC<Props> = () => {
       <div className="p-2">
         <TextHistory data={data} />
       </div>
-      <div className="border-t-base p-2 bg-foreground text-background">
+      <div className="border-t-base border-t-foreground p-2 bg-foreground text-background">
         <Prompt onCommand={onCommand} />
       </div>
     </div>
