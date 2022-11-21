@@ -1,6 +1,7 @@
-interface Level {
+export interface Level {
   id: number;
   name: string;
+  initialRoom: string;
   data: {
     rooms: [
       {
@@ -19,5 +20,5 @@ interface Level {
 }
 
 export default {
-  1: require("./1.json"),
-} as { [key: number]: Level };
+  "1": require("./1.json"),
+} as { [key: string]: Level };

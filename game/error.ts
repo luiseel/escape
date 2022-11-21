@@ -1,4 +1,5 @@
 export enum GameErrorCode {
+  GENERIC = "GENERIC",
   UNEXPECTED_ERROR = "UNEXPECTED_ERROR",
   COMMAND_NOT_FOUND = "COMMAND_NOT_FOUND",
   NO_ITEM_IN_INVENTORY = "NO_ITEM_IN_INVENTORY",
@@ -24,12 +25,16 @@ export class GameErrorMessageResolver {
 export class GameError extends Error {
   code: GameErrorCode;
 
-  private constructor(code: GameErrorCode) {
-    super();
+  private constructor(code: GameErrorCode, message?: string) {
+    super(message);
     this.code = code;
   }
 
   static fromCode(code: GameErrorCode) {
     return new GameError(code);
+  }
+
+  static generic(message: string) {
+    return new GameError(GameErrorCode.GENERIC, message);
   }
 }

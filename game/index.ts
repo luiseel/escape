@@ -1,7 +1,7 @@
 import { GameErrorMessageResolver, GameErrorCode, GameError } from "./error";
 import { CommandManager } from "./prompt";
 import errors from "./assets/errors.json";
-import levels from "./assets/levels";
+import levels, { Level } from "./assets/levels";
 
 export type ItemType = "consumable" | "tool";
 
@@ -67,11 +67,15 @@ export class Game {
 
   runPrompt(prompt: string) {
     try {
-      return this.commandManager.executeCmd(prompt);
+      return this.commandManager.execCmd(prompt);
     } catch (e) {
       if (e instanceof GameError) {
+        if (e.code === GameErrorCode.GENERIC) {
+          return e.message;
+        }
         return this.errorResolver.getMsg(e.code);
       } else {
+        console.error(e);
         return this.errorResolver.getMsg(GameErrorCode.UNEXPECTED_ERROR);
       }
     }
@@ -79,9 +83,30 @@ export class Game {
 
   private addBaseCmds() {
     // Base commands
-    this.commandManager.addCmd("help", this.help.bind(this));
-    this.commandManager.addCmd("welcome", this.welcome.bind(this));
-    this.commandManager.addCmd("levels", this.levels.bind(this));
+    this.commandManager.addCmd({
+      id: "help",
+      prompt: "help",
+      action: this.help.bind(this),
+      help: "Show the list of available commands",
+    });
+    this.commandManager.addCmd({
+      id: "welcome",
+      prompt: "welcome",
+      action: this.welcome.bind(this),
+      help: "Show the welcome message",
+    });
+    this.commandManager.addCmd({
+      id: "levels",
+      prompt: "levels",
+      action: this.levels.bind(this),
+      help: "List the levels",
+    });
+    this.commandManager.addCmd({
+      id: "play",
+      prompt: "play #(\\d+)",
+      action: this.play.bind(this),
+      help: "Select a level to play",
+    });
   }
 
   private inventory() {
@@ -98,13 +123,8 @@ export class Game {
   }
 
   private help() {
-    return `
-      These are the commands that you can call:
-      * (welcome):      Show the title screen of the game.
-      * (help):         Show this help.
-      * (levels):       List the levels you can play.
-      * (play [level]): Starts a new level.
-    `.trim();
+    const cmds = this.commandManager.listCmds();
+    return cmds.map((it) => `* ${it.prompt}: ${it.help}`).join("\n");
   }
 
   private welcome() {
@@ -115,8 +135,15 @@ export class Game {
     let result = "\\n";
     for (let level in levels) {
       const { id, name } = levels[level];
-      result = `${id}) ${name}`;
+      result = `#${id} - ${name}`;
     }
     return result;
+  }
+
+  private play(args: string[]) {
+    if (!args || args.length === 0)
+      throw GameError.generic("play requires one argument: level");
+    const [id] = args;
+    return "You want to play the game #" + id;
   }
 }

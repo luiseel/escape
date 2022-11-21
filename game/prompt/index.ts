@@ -1,8 +1,14 @@
 type Action = (args: string[]) => string;
 
-interface Command {
+interface BaseCommand {
+  id: string;
   prompt: string;
   action: Action;
+  help?: string;
+}
+
+interface Command extends BaseCommand {
+  enabled: boolean;
 }
 
 export class CommandManager {
@@ -14,16 +20,39 @@ export class CommandManager {
     this.errorMsg = errorMsg;
   }
 
-  addCmd(prompt: string, action: Action) {
+  addCmd({ id, prompt, action, help }: BaseCommand) {
     const exists = this.commands.find((it) => it.prompt === prompt);
     if (exists) throw new Error("Prompt already exists");
-    this.commands.push({ prompt, action });
+    this.commands.push({ id, prompt, action, help, enabled: true });
   }
 
-  executeCmd(prompt: string, errorMsg?: string) {
-    const cmd = this.commands.find((it) => prompt.match(`^${it.prompt}$`));
+  execCmd(prompt: string, errorMsg?: string) {
+    const cmd = this.commands.find(
+      (it) => it.enabled && prompt.toLowerCase().trim().match(`^${it.prompt}$`)
+    );
     if (!cmd) return errorMsg ?? this.errorMsg;
-    const args = prompt.match(cmd.prompt);
-    return cmd.action(args as string[]);
+    const matches = prompt.match(cmd.prompt);
+    const args = (matches ? matches.splice(1) : []) as string[];
+    return cmd.action(args);
+  }
+
+  enableCmd(id: string) {
+    const cmd = this.findCmd(id);
+    cmd.enabled = true;
+  }
+
+  disableCmd(id: string) {
+    const cmd = this.findCmd(id);
+    cmd.enabled = false;
+  }
+
+  listCmds(enabled = true) {
+    return this.commands.filter((it) => it.enabled === enabled);
+  }
+
+  private findCmd(id: string) {
+    const cmd = this.commands.find((it) => it.id === id);
+    if (!cmd) throw new Error(`Command with id ${id} was not found`);
+    return cmd;
   }
 }
