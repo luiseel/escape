@@ -123,7 +123,7 @@ export class Game {
   }
 
   private help() {
-    const cmds = this.commandManager.listCmds();
+    const cmds = this.commandManager.listCmds(false);
     return cmds.map((it) => `* ${it.prompt}: ${it.help}`).join("\n");
   }
 
@@ -141,7 +141,7 @@ export class Game {
   }
 
   private play(args: string[]) {
-    if (!args || args.length === 0)
+    if (args.length !== 1)
       throw GameError.generic("play requires one argument: level");
     const [id] = args;
     return "You want to play the game #" + id;

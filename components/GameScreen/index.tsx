@@ -3,15 +3,13 @@ import Prompt from "components/Prompt";
 import TextHistory, { Text, input, output } from "components/TextHistory";
 import { Game } from "game";
 
-type Props = {};
-
 type Prompt = {
   value: string;
   showInput: boolean;
 };
 
-const GameScreen: React.FC<Props> = () => {
-  const [game] = useState(new Game("Luis"));
+const GameScreen: React.FC = () => {
+  const [game, setGame] = useState<Game>();
   const [data, setData] = useState<Text[]>([]);
   const [prompt, setPrompt] = useState<Prompt>({
     value: "welcome",
@@ -19,6 +17,11 @@ const GameScreen: React.FC<Props> = () => {
   });
 
   useEffect(() => {
+    setGame(new Game("luiseel"));
+  }, []);
+
+  useEffect(() => {
+    if (!game) return;
     const { value, showInput } = prompt;
     const response = game.runPrompt(value);
     if (showInput) {
