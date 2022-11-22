@@ -10,7 +10,7 @@ type Props = {
 function Header() {
   return (
     <header className="fixed top-0 w-full bg-background h-[60px] border-b-base">
-      <Column>
+      <Column mode="lg">
         <Block>
           <Link href="/">Welts!</Link>
         </Block>
@@ -22,7 +22,7 @@ function Header() {
 function Footer() {
   return (
     <footer className="border-t-base h-[60px]">
-      <Column>
+      <Column mode="lg">
         <Block>
           <span>
             <a
@@ -31,7 +31,7 @@ function Footer() {
               rel="noopener noreferrer"
             >
               {" "}
-              Ah Dog!
+              ah prro!
             </a>
           </span>
         </Block>
