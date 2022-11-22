@@ -1,58 +1,13 @@
-import { GameErrorMessageResolver, GameErrorCode, GameError } from "./error";
 import { CommandManager } from "./prompt";
+import { GameErrorMessageResolver, GameErrorCode, GameError } from "./error";
+import { LevelManager } from "./level";
+import { Player } from "./player";
 import errors from "./assets/errors.json";
-import levels, { Level } from "./assets/levels";
-
-export type ItemType = "consumable" | "tool";
-
-abstract class Item {
-  name: string;
-  type: ItemType;
-
-  constructor(name: string, type: ItemType) {
-    this.name = name;
-    this.type = type;
-  }
-
-  abstract use(game: Game): string;
-}
-
-interface InventoryItem {
-  value: Item;
-  qty: number;
-}
-
-class Inventory {
-  items = new Map<string, InventoryItem>();
-
-  addItem(item: Item, qty: number) {
-    this.items.set(item.name, { value: item, qty });
-  }
-
-  getItem(name: string) {
-    const result = this.items.get(name);
-    if (!result) throw GameError.fromCode(GameErrorCode.NO_ITEM_IN_INVENTORY);
-    return result;
-  }
-}
-
-type PlayerStatus = "healthly" | "poisoned";
-
-class Player {
-  name: string;
-  health = 3;
-  status = "healthly" as PlayerStatus;
-  inventory;
-
-  constructor(name: string) {
-    this.name = name;
-    this.inventory = new Inventory();
-  }
-}
 
 export class Game {
   private errorResolver;
   private commandManager;
+  private levelManager;
   private player;
 
   constructor(playerName: string) {
@@ -62,6 +17,7 @@ export class Game {
     );
     this.commandManager = new CommandManager(commandNotFoundMessage);
     this.player = new Player(playerName);
+    this.levelManager = new LevelManager(this.commandManager, this.player);
     this.addBaseCmds();
   }
 
@@ -123,7 +79,7 @@ export class Game {
   }
 
   private help() {
-    const cmds = this.commandManager.listCmds(false);
+    const cmds = this.commandManager.listCmds();
     return cmds.map((it) => `* ${it.prompt}: ${it.help}`).join("\n");
   }
 
@@ -132,9 +88,10 @@ export class Game {
   }
 
   private levels() {
+    const levels = this.levelManager.listLevels();
     let result = "\\n";
-    for (let level in levels) {
-      const { id, name } = levels[level];
+    for (let level of levels) {
+      const { id, name } = level;
       result = `#${id} - ${name}`;
     }
     return result;
@@ -144,6 +101,6 @@ export class Game {
     if (args.length !== 1)
       throw GameError.generic("play requires one argument: level");
     const [id] = args;
-    return "You want to play the game #" + id;
+    return this.levelManager.loadLevel(id);
   }
 }

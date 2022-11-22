@@ -9,16 +9,14 @@ type Prompt = {
 };
 
 const GameScreen: React.FC = () => {
-  const [game, setGame] = useState<Game>();
+  // This might cause to manually re-render that page if you are making changes
+  // on the `game` codebase
+  const [game] = useState<Game>(new Game("Luis"));
   const [data, setData] = useState<Text[]>([]);
   const [prompt, setPrompt] = useState<Prompt>({
     value: "welcome",
     showInput: false,
   });
-
-  useEffect(() => {
-    setGame(new Game("luiseel"));
-  }, []);
 
   useEffect(() => {
     if (!game) return;

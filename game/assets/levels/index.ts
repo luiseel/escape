@@ -1,24 +1,5 @@
-export interface Level {
-  id: number;
-  name: string;
-  initialRoom: string;
-  data: {
-    rooms: [
-      {
-        name: string;
-        int: {
-          name: string;
-          type: string;
-          cmds: {
-            prompt: string;
-            response: string;
-          }[];
-        }[];
-      }
-    ];
-  }[];
-}
+import { LevelData } from "game/level";
 
 export default {
   "1": require("./1.json"),
-} as { [key: string]: Level };
+} as { [key: string]: LevelData };
