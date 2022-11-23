@@ -6,7 +6,6 @@ html {
   @apply bg-background text-foreground;
 }
 
-
 pre {
   @apply font-sans;
 }

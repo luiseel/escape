@@ -16,7 +16,7 @@ export interface LevelData {
           name: string;
           type: string;
           cmds: {
-            prompt: string;
+            name: string;
             response: string;
           }[];
         }[];
@@ -45,22 +45,26 @@ export class LevelManager {
 
     this.room = level.initialRoom;
 
-    const commands = [];
-    for (const rooms of level.data.rooms) {
-      for (const int of rooms.int) {
-        for (const cmd of int.cmds) {
-          commands.push({
-            id: `${rooms.name}${int.name}${cmd.prompt}`,
-            prompt: `${cmd.prompt} ${int.name}`,
-            action: () => cmd.response,
-          });
-        }
-      }
-    }
-
-    for (const cmd of commands) {
-      this.commandManager.addCmd(cmd);
-    }
+    this.commandManager.addCmd({
+      name: "look",
+      args: ["object"],
+      action: (args: string[]) => {
+        if (args.length !== 1)
+          throw GameError.generic("look requires one argument: object");
+        const [object] = args;
+        const room = level.data.rooms.find((it) => it.name === this.room);
+        if (!room) throw new Error("Room not found");
+        const int = room.int.find((it) => it.name === object);
+        if (!int) throw GameError.generic(`There is no ${object} to look at`);
+        const cmd = int.cmds.find((it) => it.name === "look");
+        if (!cmd)
+          throw GameError.generic(
+            "There is nothing interesing on the " + object
+          );
+        return cmd.response;
+      },
+      help: "Look at something",
+    });
 
     return level.intro;
   }

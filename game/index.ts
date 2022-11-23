@@ -40,26 +40,23 @@ export class Game {
   private addBaseCmds() {
     // Base commands
     this.commandManager.addCmd({
-      id: "help",
-      prompt: "help",
+      name: "help",
       action: this.help.bind(this),
       help: "Show the list of available commands",
     });
     this.commandManager.addCmd({
-      id: "welcome",
-      prompt: "welcome",
+      name: "welcome",
       action: this.welcome.bind(this),
       help: "Show the welcome message",
     });
     this.commandManager.addCmd({
-      id: "levels",
-      prompt: "levels",
+      name: "levels",
       action: this.levels.bind(this),
       help: "List the levels",
     });
     this.commandManager.addCmd({
-      id: "play",
-      prompt: "play #(\\d+)",
+      name: "play",
+      args: ["level"],
       action: this.play.bind(this),
       help: "Select a level to play",
     });
@@ -80,7 +77,12 @@ export class Game {
 
   private help() {
     const cmds = this.commandManager.listCmds();
-    return cmds.map((it) => `* ${it.prompt}: ${it.help}`).join("\n");
+    return cmds
+      .map(({ name, args, help }) => {
+        const theArgs = args ? ` ${args.map((it) => `[${it}]`).join(" ")}` : "";
+        return `* ${name}${theArgs}: ${help}`;
+      })
+      .join("\n");
   }
 
   private welcome() {

@@ -1,8 +1,8 @@
 type Action = (args: string[]) => string;
 
 interface BaseCommand {
-  id: string;
-  prompt: string;
+  name: string;
+  args?: string[];
   action: Action;
   help?: string;
 }
@@ -20,29 +20,28 @@ export class CommandManager {
     this.errorMsg = errorMsg;
   }
 
-  addCmd({ id, prompt, action, help }: BaseCommand) {
-    const exists = this.commands.find((it) => it.prompt === prompt);
+  addCmd({ name, args, action, help }: BaseCommand) {
+    const exists = this.commands.find((it) => it.name === name);
     if (exists) throw new Error("Prompt already exists");
-    this.commands.push({ id, prompt, action, help, enabled: true });
+    this.commands.push({ name, args, action, help, enabled: true });
   }
 
   execCmd(prompt: string, errorMsg?: string) {
-    const cmd = this.commands.find(
-      (it) => it.enabled && prompt.toLowerCase().trim().match(`^${it.prompt}$`)
-    );
+    const parts = prompt.toLowerCase().trim().split(/\ +/);
+    const [cmdName] = parts;
+    const cmd = this.commands.find((it) => it.enabled && it.name === cmdName);
     if (!cmd) return errorMsg ?? this.errorMsg;
-    const matches = prompt.match(cmd.prompt);
-    const args = (matches ? matches.splice(1) : []) as string[];
+    const args = parts.splice(1);
     return cmd.action(args);
   }
 
-  enableCmd(id: string) {
-    const cmd = this.findCmd(id);
+  enableCmd(name: string) {
+    const cmd = this.findCmd(name);
     cmd.enabled = true;
   }
 
-  disableCmd(id: string) {
-    const cmd = this.findCmd(id);
+  disableCmd(name: string) {
+    const cmd = this.findCmd(name);
     cmd.enabled = false;
   }
 
@@ -50,9 +49,9 @@ export class CommandManager {
     return this.commands.filter((it) => it.enabled === enabled);
   }
 
-  private findCmd(id: string) {
-    const cmd = this.commands.find((it) => it.id === id);
-    if (!cmd) throw new Error(`Command with id ${id} was not found`);
+  private findCmd(name: string) {
+    const cmd = this.commands.find((it) => it.name === name);
+    if (!cmd) throw new Error(`Command with id ${name} was not found`);
     return cmd;
   }
 }
