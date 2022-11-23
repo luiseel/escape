@@ -5,21 +5,20 @@ type Props = {
   children: React.ReactNode;
 };
 
+const modes = {
+  full: "lg:w-full",
+  "2xl": "lg:max-w-screen-2xl",
+  xl: "lg:max-w-screen-xl",
+  lg: "lg:max-w-screen-lg",
+  md: "lg:max-w-screen-md",
+};
+
 const Column: React.FC<Props> = ({ mode = "xl", children }) => {
   const baseClasses = "px-4 h-full lg:mx-auto lg:px-16";
-  const [classes, setClasses] = useState<string>();
-
-  useEffect(() => {
-    if (mode === "full") setClasses(`lg:w-full`);
-    if (mode === "2xl") setClasses(`lg:max-w-screen-2xl`);
-    if (mode === "xl") setClasses(`lg:max-w-screen-xl`);
-    if (mode === "lg") setClasses(`lg:max-w-screen-lg`);
-    if (mode === "md") setClasses(`lg:max-w-screen-md`);
-  }, [mode]);
 
   return (
     <div className="w-full h-full">
-      <div className={`${baseClasses} ${classes}`}>{children}</div>
+      <div className={`${baseClasses} ${modes[mode]}`}>{children}</div>
     </div>
   );
 };

@@ -91,10 +91,10 @@ export class Game {
 
   private levels() {
     const levels = this.levelManager.listLevels();
-    let result = "\\n";
+    let result = "";
     for (let level of levels) {
       const { id, name } = level;
-      result = `#${id} - ${name}`;
+      result += `${id} - ${name}`;
     }
     return result;
   }
