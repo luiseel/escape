@@ -6,7 +6,7 @@ import levels from "./assets/levels";
 export interface LevelData {
   id: number;
   name: string;
-  initialRoom: string;
+  initialScene: string;
   intro: string;
   data: {
     rooms: [
@@ -27,13 +27,13 @@ export interface LevelData {
 
 export class LevelManager {
   private commandManager;
-  private player;
+  player;
 
-  private room?: string;
+  private scene?: string;
 
-  constructor(commandManager: CommandManager, player: Player) {
+  constructor(commandManager: CommandManager) {
     this.commandManager = commandManager;
-    this.player = player;
+    this.player = new Player("luis");
   }
 
   loadLevel(id: string) {
@@ -43,7 +43,7 @@ export class LevelManager {
     this.commandManager.disableCmd("levels");
     this.commandManager.disableCmd("welcome");
 
-    this.room = level.initialRoom;
+    this.scene = level.initialScene;
 
     this.commandManager.addCmd({
       name: "look",
@@ -52,9 +52,9 @@ export class LevelManager {
         if (args.length !== 1)
           throw GameError.generic("look requires one argument: object");
         const [object] = args;
-        const room = level.data.rooms.find((it) => it.name === this.room);
-        if (!room) throw new Error("Room not found");
-        const int = room.int.find((it) => it.name === object);
+        const scene = level.data.rooms.find((it) => it.name === this.scene);
+        if (!scene) throw new Error("Room not found");
+        const int = scene.int.find((it) => it.name === object);
         if (!int) throw GameError.generic(`There is no ${object} to look at`);
         const cmd = int.cmds.find((it) => it.name === "look");
         if (!cmd)

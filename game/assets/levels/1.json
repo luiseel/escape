@@ -1,13 +1,23 @@
 {
   "id": 1,
   "name": "OMNI-H: What cures everything",
-  "initialRoom": "studio",
+  "initialScene": "studio",
   "intro": "On October 1st, 1991, Professor Garcia brought one of the mightiest discoveries of all time. A strange creature found on a crater made by a meteorite in December of 1988 revealed to Collins and his team how the human regeneration system works. An antidote was developed out of the creature, that no one has seen ever again.\n\nYou are sitting at his desk, looking at his poor body lying on the ground, bathing in a pool of his blood. As his former assistant, you have followed his research OMNI-H, or as he called it, what cures everything.\n\nYour days are numbered. With cancer expanding throughout all your body, you decide to take someone's life in order to preserve yours.\n\nYour mission is simple, find the antidote that will save your life... but keep your eyes open. You are not alone.",
   "data": {
     "rooms": [
       {
         "name": "studio",
         "int": [
+          {
+            "name": "around",
+            "type": "place",
+            "cmds": [
+              {
+                "name": "look",
+                "response": "You can see that the room has a desk and a door"
+              }
+            ]
+          },
           {
             "name": "desk",
             "type": "object",

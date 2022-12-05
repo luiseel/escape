@@ -8,16 +8,14 @@ export class Game {
   private errorResolver;
   private commandManager;
   private levelManager;
-  private player;
 
-  constructor(playerName: string) {
+  constructor() {
     this.errorResolver = new GameErrorMessageResolver(errors);
     const commandNotFoundMessage = this.errorResolver.getMsg(
       GameErrorCode.COMMAND_NOT_FOUND
     );
     this.commandManager = new CommandManager(commandNotFoundMessage);
-    this.player = new Player(playerName);
-    this.levelManager = new LevelManager(this.commandManager, this.player);
+    this.levelManager = new LevelManager(this.commandManager);
     this.addBaseCmds();
   }
 
@@ -60,19 +58,6 @@ export class Game {
       action: this.play.bind(this),
       help: "Select a level to play",
     });
-  }
-
-  private inventory() {
-    if (this.player.inventory.items.size === 0)
-      throw GameError.fromCode(GameErrorCode.NO_ITEMS);
-    let result = "";
-    for (let {
-      value: { name },
-      qty,
-    } of this.player.inventory.items.values()) {
-      result += `* ${name} X ${qty}\n`;
-    }
-    return result;
   }
 
   private help() {
