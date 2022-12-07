@@ -1,9 +1,10 @@
 import { CommandManager } from "./prompt";
-import { GameError } from "./error";
+import { GameError, GameErrorCode } from "./error";
 import { Player } from "./player";
 import levels from "./assets/levels";
+import { GameObject, Scene } from "game";
 
-export interface LevelData {
+export interface LevelSchema {
   id: number;
   name: string;
   initialScene: string;
@@ -25,50 +26,139 @@ export interface LevelData {
   };
 }
 
-export class LevelManager {
+export class Level {
   private commandManager;
+  private activeScene?: Scene;
   player;
-
-  private scene?: string;
 
   constructor(commandManager: CommandManager) {
     this.commandManager = commandManager;
-    this.player = new Player("luis");
+    this.player = new Player();
   }
 
-  loadLevel(id: string) {
-    const level = levels[id];
-    if (!level) throw GameError.generic("Level not found");
-    this.commandManager.disableCmd("play");
-    this.commandManager.disableCmd("levels");
-    this.commandManager.disableCmd("welcome");
+  // Starts a new level
+  start(id: string) {
+    // Disabling base commands
+    this.commandManager.disableCmds(["help", "welcome", "levels", "play"]);
 
-    this.scene = level.initialScene;
+    // Building the scenes
+    const initial = new Scene("You are in a room");
+    const norhtScene = new Scene("You are in the north room");
+    initial.norhtScene = norhtScene;
+    norhtScene.southScene = initial;
 
-    this.commandManager.addCmd({
-      name: "look",
-      args: ["object"],
-      action: (args: string[]) => {
-        if (args.length !== 1)
-          throw GameError.generic("look requires one argument: object");
-        const [object] = args;
-        const scene = level.data.rooms.find((it) => it.name === this.scene);
-        if (!scene) throw new Error("Room not found");
-        const int = scene.int.find((it) => it.name === object);
-        if (!int) throw GameError.generic(`There is no ${object} to look at`);
-        const cmd = int.cmds.find((it) => it.name === "look");
-        if (!cmd)
-          throw GameError.generic(
-            "There is nothing interesing on the " + object
-          );
-        return cmd.response;
+    // Settings objects onto the scenes
+    const desk = new GameObject("desk", "This is a desk");
+    const chair = new GameObject("chair", "This is a chair");
+    const notebook = new GameObject("notebook", "This is a notebook", "item");
+    initial.objects.push(desk);
+    initial.objects.push(chair);
+
+    desk.objects.push(notebook);
+
+    // Set active scene
+    this.activeScene = initial;
+
+    // Register commands
+    this.commandManager.registerCmds([
+      {
+        name: "go",
+        args: ["direction"],
+        action: this.go.bind(this),
+        help: "Go to a direction",
       },
-      help: "Look at something",
-    });
+      {
+        name: "look",
+        args: ["object"],
+        action: this.look.bind(this),
+        help: "Look at something",
+      },
+      {
+        name: "take",
+        args: ["object"],
+        action: this.take.bind(this),
+        help: "Take an object",
+      },
+    ]);
 
-    return level.intro;
+    return initial.description;
   }
 
+  private go(args: string[]) {
+    if (!this.activeScene) throw new Error("No active scene");
+
+    if (args.length !== 1) throw GameError.generic("go require one argument");
+
+    const [direction] = args;
+    if (direction === "north") {
+      if (!this.activeScene.norhtScene)
+        throw GameError.fromCode(GameErrorCode.NO_SCENE_IN_DIRECTION);
+      this.activeScene = this.activeScene?.norhtScene;
+    } else if (direction === "south") {
+      if (!this.activeScene.southScene)
+        throw GameError.fromCode(GameErrorCode.NO_SCENE_IN_DIRECTION);
+      this.activeScene = this.activeScene?.southScene;
+    } else if (direction === "east") {
+      if (!this.activeScene.eastScene)
+        throw GameError.fromCode(GameErrorCode.NO_SCENE_IN_DIRECTION);
+      this.activeScene = this.activeScene?.eastScene;
+    } else if (direction === "west") {
+      if (!this.activeScene.westScene)
+        throw GameError.fromCode(GameErrorCode.NO_SCENE_IN_DIRECTION);
+      this.activeScene = this.activeScene?.westScene;
+    } else {
+      throw GameError.fromCode(GameErrorCode.COMMAND_NOT_FOUND);
+    }
+
+    return "Ok.";
+  }
+
+  private look(args: string[]) {
+    if (!this.activeScene) throw new Error("No active scene");
+
+    if (args.length !== 1) throw GameError.generic("look require one argument");
+
+    const [object] = args;
+
+    if (object === "around") {
+      return this.activeScene.description;
+    } else {
+      const found = this.findObject(object, this.activeScene.objects);
+      if (found) return found.description;
+    }
+
+    return `There's no ${object} to look at`;
+  }
+
+  private take(args: string[]) {
+    if (!this.activeScene) throw new Error("No active scene");
+    if (args.length !== 1)
+      throw GameError.generic("get require one argument: item");
+
+    const [item] = args;
+    const obj = this.findObject(item, this.activeScene.objects);
+    if (!obj) throw GameError.generic(`There's no ${item} to get`);
+    if (obj.type !== "item") throw GameError.generic("You can't take that");
+    if (obj.quantity <= 0)
+      throw GameError.generic(`There's no ${item} to take`);
+    this.player.inventory.addItem(obj, obj.quantity);
+    obj.quantity = 0;
+    return `You got ${obj.name}`;
+  }
+
+  private findObject(name: string, objects: GameObject[]): GameObject | null {
+    for (const obj of objects) {
+      if (obj.name === name) return obj;
+      if (obj.objects) {
+        const found = this.findObject(name, obj.objects);
+        if (!found) continue;
+        if (found.name === name) return found;
+      }
+    }
+    return null;
+  }
+
+  // TODO remove this in favor of a proper LevelManager class
   listLevels() {
     const result = [];
     for (let level in levels) {

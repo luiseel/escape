@@ -1,5 +1,5 @@
-import { LevelData } from "game/level";
+import { LevelSchema } from "game/level";
 
 export default {
   "1": require("./1.json"),
-} as { [key: string]: LevelData };
+} as { [key: string]: LevelSchema };

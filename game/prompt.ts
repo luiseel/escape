@@ -20,10 +20,14 @@ export class CommandManager {
     this.errorMsg = errorMsg;
   }
 
-  addCmd({ name, args, action, help }: BaseCommand) {
+  registerCmd({ name, args, action, help }: BaseCommand) {
     const exists = this.commands.find((it) => it.name === name);
     if (exists) throw new Error("Prompt already exists");
     this.commands.push({ name, args, action, help, enabled: true });
+  }
+
+  registerCmds(cmds: BaseCommand[]) {
+    return cmds.forEach((it) => this.registerCmd(it));
   }
 
   execCmd(prompt: string, errorMsg?: string) {
@@ -40,9 +44,17 @@ export class CommandManager {
     cmd.enabled = true;
   }
 
+  enableCmds(name: string[]) {
+    return name.forEach((it) => this.enableCmd(it));
+  }
+
   disableCmd(name: string) {
     const cmd = this.findCmd(name);
     cmd.enabled = false;
+  }
+
+  disableCmds(name: string[]) {
+    return name.forEach((it) => this.disableCmd(it));
   }
 
   listCmds(enabled = true) {

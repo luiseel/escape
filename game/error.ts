@@ -4,6 +4,7 @@ export enum GameErrorCode {
   COMMAND_NOT_FOUND = "COMMAND_NOT_FOUND",
   NO_ITEM_IN_INVENTORY = "NO_ITEM_IN_INVENTORY",
   NO_ITEMS = "NO_ITEMS",
+  NO_SCENE_IN_DIRECTION = "NO_SCENE_IN_DIRECTION",
 }
 
 export type GameErrorCodeMessages = { [key: string]: string };

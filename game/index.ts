@@ -1,8 +1,44 @@
 import { CommandManager } from "./prompt";
 import { GameErrorMessageResolver, GameErrorCode, GameError } from "./error";
-import { LevelManager } from "./level";
-import { Player } from "./player";
+import { Level } from "./level";
 import errors from "./assets/errors.json";
+
+export class Scene {
+  description;
+  norhtScene?: Scene;
+  southScene?: Scene;
+  eastScene?: Scene;
+  westScene?: Scene;
+  objects;
+
+  constructor(description: string) {
+    this.description = description;
+    this.objects = [] as GameObject[];
+  }
+}
+
+export type GameObjectType = "thing" | "item";
+
+export class GameObject {
+  name;
+  description;
+  objects;
+  quantity;
+  type: GameObjectType;
+
+  constructor(
+    name: string,
+    description: string,
+    type: GameObjectType = "thing",
+    quantity = 1
+  ) {
+    this.name = name;
+    this.description = description;
+    this.objects = [] as GameObject[];
+    this.type = type;
+    this.quantity = quantity;
+  }
+}
 
 export class Game {
   private errorResolver;
@@ -15,7 +51,7 @@ export class Game {
       GameErrorCode.COMMAND_NOT_FOUND
     );
     this.commandManager = new CommandManager(commandNotFoundMessage);
-    this.levelManager = new LevelManager(this.commandManager);
+    this.levelManager = new Level(this.commandManager);
     this.addBaseCmds();
   }
 
@@ -37,22 +73,22 @@ export class Game {
 
   private addBaseCmds() {
     // Base commands
-    this.commandManager.addCmd({
+    this.commandManager.registerCmd({
       name: "help",
       action: this.help.bind(this),
       help: "Show the list of available commands",
     });
-    this.commandManager.addCmd({
+    this.commandManager.registerCmd({
       name: "welcome",
       action: this.welcome.bind(this),
       help: "Show the welcome message",
     });
-    this.commandManager.addCmd({
+    this.commandManager.registerCmd({
       name: "levels",
       action: this.levels.bind(this),
       help: "List the levels",
     });
-    this.commandManager.addCmd({
+    this.commandManager.registerCmd({
       name: "play",
       args: ["level"],
       action: this.play.bind(this),
@@ -88,6 +124,6 @@ export class Game {
     if (args.length !== 1)
       throw GameError.generic("play requires one argument: level");
     const [id] = args;
-    return this.levelManager.loadLevel(id);
+    return this.levelManager.start(id);
   }
 }

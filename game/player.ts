@@ -1,26 +1,15 @@
+import { GameObject } from "game";
 import { GameError, GameErrorCode } from "./error";
 
-export type ItemType = "consumable" | "tool";
-
-abstract class Item {
-  name: string;
-  type: ItemType;
-
-  constructor(name: string, type: ItemType) {
-    this.name = name;
-    this.type = type;
-  }
-}
-
 interface InventoryItem {
-  value: Item;
+  value: GameObject;
   qty: number;
 }
 
 class Inventory {
   items = new Map<string, InventoryItem>();
 
-  addItem(item: Item, qty: number) {
+  addItem(item: GameObject, qty: number) {
     this.items.set(item.name, { value: item, qty });
   }
 
@@ -34,13 +23,11 @@ class Inventory {
 type PlayerStatus = "healthly" | "poisoned";
 
 export class Player {
-  name: string;
   health = 3;
   status = "healthly" as PlayerStatus;
   inventory;
 
-  constructor(name: string) {
-    this.name = name;
+  constructor() {
     this.inventory = new Inventory();
   }
 }
