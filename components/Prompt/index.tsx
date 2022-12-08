@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 type Props = {
+  // eslint-disable-next-line no-unused-vars
   onCommand: (_: string) => void;
 };
 

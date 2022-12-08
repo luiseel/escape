@@ -3,7 +3,7 @@ import Prompt from "components/Prompt";
 import TextHistory, { Text, input, output } from "components/TextHistory";
 import { Game } from "game";
 
-type Prompt = {
+type PromptSchema = {
   value: string;
   showInput: boolean;
 };
@@ -11,9 +11,9 @@ type Prompt = {
 const GameScreen: React.FC = () => {
   // This might cause to manually re-render that page if you are making changes
   // on the `game` codebase
-  const [game] = useState<Game>(new Game("Luis"));
+  const [game] = useState<Game>(new Game());
   const [data, setData] = useState<Text[]>([]);
-  const [prompt, setPrompt] = useState<Prompt>({
+  const [prompt, setPrompt] = useState<PromptSchema>({
     value: "welcome",
     showInput: false,
   });

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 type Props = {
   mode?: "full" | "2xl" | "xl" | "lg" | "md";

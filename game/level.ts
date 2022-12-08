@@ -30,14 +30,16 @@ export class Level {
   private commandManager;
   private activeScene?: Scene;
   player;
+  id;
 
-  constructor(commandManager: CommandManager) {
+  constructor(id: string, commandManager: CommandManager) {
+    this.id = id;
     this.commandManager = commandManager;
     this.player = new Player();
   }
 
   // Starts a new level
-  start(id: string) {
+  start() {
     // Disabling base commands
     this.commandManager.disableCmds(["help", "welcome", "play"]);
 
