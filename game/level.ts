@@ -39,7 +39,7 @@ export class Level {
   // Starts a new level
   start(id: string) {
     // Disabling base commands
-    this.commandManager.disableCmds(["help", "welcome", "levels", "play"]);
+    this.commandManager.disableCmds(["help", "welcome", "play"]);
 
     // Building the scenes
     const initial = new Scene("You are in a room");

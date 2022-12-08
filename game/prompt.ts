@@ -63,7 +63,7 @@ export class CommandManager {
 
   private findCmd(name: string) {
     const cmd = this.commands.find((it) => it.name === name);
-    if (!cmd) throw new Error(`Command with id ${name} was not found`);
+    if (!cmd) throw new Error(`Command "${name}" was not found`);
     return cmd;
   }
 }
