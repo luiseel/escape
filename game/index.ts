@@ -1,7 +1,7 @@
 import { CommandManager } from "./command";
 import { GameErrorMessageResolver, GameErrorCode, GameError } from "./error";
-import errors from "./assets/errors.json";
 import { Player } from "./player";
+import errors from "./assets/errors.json";
 
 export class Scene {
   description;
@@ -47,7 +47,12 @@ export class OpenableObject extends GameObject {
 export class Item extends GameObject {
   use;
 
-  constructor(name: string, description: string, fn: () => string) {
+  constructor(
+    name: string,
+    description: string,
+    // eslint-disable-next-line no-unused-vars
+    fn: (target?: string) => string
+  ) {
     super(name, description);
     this.use = fn;
   }
@@ -97,6 +102,7 @@ export class Level {
         name: "use",
         args: ["object"],
         action: this.use.bind(this),
+        prompt: this.promptForUse.bind(this),
         help: "Use an object from your inventory",
       },
     ]);
@@ -109,9 +115,14 @@ export class Level {
     const desk = new GameObject("desk", "This is a desk");
     const chair = new GameObject("chair", "This is a chair");
     const door = new OpenableObject("door", "This is a door");
-    const key = new Item("key", "This is a key", () => {
-      door.isOpen = true;
-      return "You used the key";
+    const key = new Item("key", "This is a key", (target) => {
+      if (!this.activeScene) throw new Error("No active scene");
+      if (!target) throw GameError.generic("You need to specify a target");
+      const door = this.findObject(target, this.activeScene.objects);
+      console.log(door);
+      if (!door) throw GameError.generic("You can't use the key here");
+      (door as OpenableObject).isOpen = true;
+      return "You have opened the door.";
     });
 
     // Building the scenes
@@ -207,21 +218,31 @@ export class Level {
   }
 
   private use(args: string[]) {
+    const [item, target] = args;
+    return this.player.inventory.useItem(item, target);
+  }
+
+  private promptForUse(args: string[]) {
     if (!this.activeScene) throw new Error("No active scene");
     if (args.length !== 1)
       throw GameError.generic("use require one argument: item");
     const [item] = args;
-    return this.player.inventory.useItem(item);
+    if (!this.player.inventory.hasItem(item))
+      throw GameError.generic(`You don't have ${item}`);
+    return "Which object do you want to use it on?";
   }
 
   private findObject(
     name: string,
     objects: GameObject[]
   ): GameObject | undefined {
+    console.log(name, objects);
     for (const obj of objects) {
       if (obj.name === name) return obj;
       if (obj.objects) {
-        return this.findObject(name, obj.objects);
+        const found = this.findObject(name, obj.objects);
+        if (!found) continue;
+        if (found.name === name) return found;
       }
     }
   }
