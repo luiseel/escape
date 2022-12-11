@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 type Action = (args: string[]) => string;
 
 interface BaseCommand {
@@ -31,7 +32,7 @@ export class CommandManager {
   }
 
   execCmd(prompt: string, errorMsg?: string) {
-    const parts = prompt.toLowerCase().trim().split(/\ +/);
+    const parts = prompt.toLowerCase().trim().split(/ +/);
     const [cmdName] = parts;
     const cmd = this.commands.find((it) => it.enabled && it.name === cmdName);
     if (!cmd) return errorMsg ?? this.errorMsg;

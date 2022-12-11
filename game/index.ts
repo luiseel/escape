@@ -1,4 +1,4 @@
-import { CommandManager } from "./prompt";
+import { CommandManager } from "./command";
 import { GameErrorMessageResolver, GameErrorCode, GameError } from "./error";
 import errors from "./assets/errors.json";
 import { Player } from "./player";
