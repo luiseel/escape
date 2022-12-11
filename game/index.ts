@@ -73,7 +73,7 @@ export class Level {
   // Starts a new level
   start() {
     // Disabling base commands
-    this.commandManager.disableCmds(["help", "welcome", "play"]);
+    this.commandManager.disableCmds(["welcome", "play"]);
 
     // Set active scene
     this.activeScene = this.setupLevel();
