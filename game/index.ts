@@ -45,11 +45,11 @@ export class OpenableObject extends GameObject {
 }
 
 export class Item extends GameObject {
-  fn;
+  use;
 
-  constructor(name: string, description: string, fn?: () => string) {
+  constructor(name: string, description: string, fn: () => string) {
     super(name, description);
-    this.fn = fn;
+    this.use = fn;
   }
 }
 
@@ -191,7 +191,8 @@ export class Level {
     if (!obj) throw GameError.generic(`There's no ${item} to get`);
     if (!(obj instanceof Item))
       throw GameError.generic(`You can't get ${item}`);
-    this.player.inventory.putItem(obj, 1);
+    this.player.inventory.putItem(obj);
+    this.removeObject(item, this.activeScene.objects);
     return `You got ${item}`;
   }
 
@@ -205,6 +206,18 @@ export class Level {
       }
     }
     return null;
+  }
+
+  private removeObject(name: string, objects: GameObject[]) {
+    for (const obj of objects) {
+      if (obj.name === name) {
+        objects.splice(objects.indexOf(obj), 1);
+        return;
+      }
+      if (obj.objects) {
+        this.removeObject(name, obj.objects);
+      }
+    }
   }
 }
 

@@ -1,19 +1,17 @@
 import { Item } from "game";
-
-interface InventoryItem {
-  value: Item;
-  qty: number;
-}
+import { GameError } from "./error";
 
 class Inventory {
-  items = new Map<string, InventoryItem>();
+  items = [] as Item[];
 
-  putItem(item: Item, qty: number) {
-    this.items.set(item.name, { value: item, qty });
+  putItem(item: Item) {
+    this.items.push(item);
   }
 
   useItem(name: string) {
-    return `You used this item: ${name}`;
+    const found = this.items.find((item) => item.name === name);
+    if (!found) throw GameError.generic(`You don't have ${name}`);
+    return found.use();
   }
 }
 
