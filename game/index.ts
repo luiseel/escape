@@ -196,16 +196,16 @@ export class Level {
     return `You got ${item}`;
   }
 
-  private findObject(name: string, objects: GameObject[]): GameObject | null {
+  private findObject(
+    name: string,
+    objects: GameObject[]
+  ): GameObject | undefined {
     for (const obj of objects) {
       if (obj.name === name) return obj;
       if (obj.objects) {
-        const found = this.findObject(name, obj.objects);
-        if (!found) continue;
-        if (found.name === name) return found;
+        return this.findObject(name, obj.objects);
       }
     }
-    return null;
   }
 
   private removeObject(name: string, objects: GameObject[]) {
