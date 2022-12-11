@@ -129,7 +129,7 @@ export class Level {
         name: "use",
         args: ["object"],
         action: this.use.bind(this),
-        help: "Use an item",
+        help: "Use an object from your inventory",
       },
     ]);
 
