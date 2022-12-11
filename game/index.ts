@@ -70,6 +70,41 @@ export class Level {
     // Disabling base commands
     this.commandManager.disableCmds(["help", "welcome", "play"]);
 
+    // Set active scene
+    this.activeScene = this.setupLevel();
+
+    // Register commands
+    this.commandManager.registerCmds([
+      {
+        name: "go",
+        args: ["direction"],
+        action: this.go.bind(this),
+        help: "Go to a direction",
+      },
+      {
+        name: "look",
+        args: ["object"],
+        action: this.look.bind(this),
+        help: "Look at something",
+      },
+      {
+        name: "take",
+        args: ["object"],
+        action: this.take.bind(this),
+        help: "Take an object",
+      },
+      {
+        name: "use",
+        args: ["object"],
+        action: this.use.bind(this),
+        help: "Use an object from your inventory",
+      },
+    ]);
+
+    return this.activeScene.description;
+  }
+
+  private setupLevel() {
     // Objects
     const desk = new GameObject("desk", "This is a desk");
     const chair = new GameObject("chair", "This is a chair");
@@ -102,38 +137,7 @@ export class Level {
 
     desk.objects.push(key);
 
-    // Set active scene
-    this.activeScene = initial;
-
-    // Register commands
-    this.commandManager.registerCmds([
-      {
-        name: "go",
-        args: ["direction"],
-        action: this.go.bind(this),
-        help: "Go to a direction",
-      },
-      {
-        name: "look",
-        args: ["object"],
-        action: this.look.bind(this),
-        help: "Look at something",
-      },
-      {
-        name: "take",
-        args: ["object"],
-        action: this.take.bind(this),
-        help: "Take an object",
-      },
-      {
-        name: "use",
-        args: ["object"],
-        action: this.use.bind(this),
-        help: "Use an object from your inventory",
-      },
-    ]);
-
-    return initial.description;
+    return initial;
   }
 
   private go(args: string[]) {
