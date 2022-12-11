@@ -125,6 +125,12 @@ export class Level {
         action: this.take.bind(this),
         help: "Take an object",
       },
+      {
+        name: "use",
+        args: ["object"],
+        action: this.use.bind(this),
+        help: "Use an item",
+      },
     ]);
 
     return initial.description;
@@ -194,6 +200,14 @@ export class Level {
     this.player.inventory.putItem(obj);
     this.removeObject(item, this.activeScene.objects);
     return `You got ${item}`;
+  }
+
+  private use(args: string[]) {
+    if (!this.activeScene) throw new Error("No active scene");
+    if (args.length !== 1)
+      throw GameError.generic("use require one argument: item");
+    const [item] = args;
+    return this.player.inventory.useItem(item);
   }
 
   private findObject(
